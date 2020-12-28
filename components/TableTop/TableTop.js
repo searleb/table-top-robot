@@ -16,12 +16,14 @@ export default function TableTop({ robot }) {
     <section className={css.section}>
       <div className={css.grid}>
         {/* {Array.from(Array(25)).map((_, i) => <div key={i} />)} */}
-        <span
-          className={css.robo}
-          style={{ ...getRobotStyle() }}
-        >
-          🤖
-        </span>
+        {robot && (
+          <span
+            className={css.robo}
+            style={{ ...getRobotStyle() }}
+          >
+            🤖
+          </span>
+        )}
       </div>
     </section>
   );

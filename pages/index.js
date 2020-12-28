@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useState } from 'react';
 import TableTop from '../components/TableTop';
+import Terminal from '../components/Terminal';
 
 /**
  * Grid index allowed x or y: 0-4
@@ -16,9 +17,7 @@ import TableTop from '../components/TableTop';
  */
 
 export default function Home() {
-  const [robot, setBotPos] = useState({
-    x: 0, y: 0, facing: 0, rotation: 0,
-  });
+  const [robot, setRobot] = useState(null);
   const [moveError, setMoveError] = useState(false);
 
   const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
@@ -27,7 +26,7 @@ export default function Home() {
     if (robot.y === 4) {
       setMoveError(true);
     } else {
-      setBotPos({
+      setRobot({
         ...robot,
         y: robot.y + 1,
       });
@@ -38,7 +37,7 @@ export default function Home() {
     if (robot.y === 0) {
       setMoveError(true);
     } else {
-      setBotPos({
+      setRobot({
         ...robot,
         y: robot.y - 1,
       });
@@ -49,7 +48,7 @@ export default function Home() {
     if (robot.x === 4) {
       setMoveError(true);
     } else {
-      setBotPos({
+      setRobot({
         ...robot,
         x: robot.x + 1,
       });
@@ -60,7 +59,7 @@ export default function Home() {
     if (robot.x === 0) {
       setMoveError(true);
     } else {
-      setBotPos({
+      setRobot({
         ...robot,
         x: robot.x - 1,
       });
@@ -113,13 +112,14 @@ export default function Home() {
       }
     }
 
-    setBotPos({
+    setRobot({
       ...robot,
       facing: newHeading,
       rotation: newRotation,
     });
   };
 
+  console.log('robot', robot);
   return (
     <div>
       <Head>
@@ -131,9 +131,9 @@ export default function Home() {
         <h1>Table Top Robot</h1>
 
         <TableTop robot={robot} />
-
-        <pre>{`${robot.x}, ${robot.y}, ${DIRECTIONS[robot.facing]}`}</pre>
-        <pre>{`${moveError}`}</pre>
+        <Terminal
+          setRobot={setRobot}
+        />
 
         <button onClick={handleMove}>move</button>
         <button onClick={() => handleRotate('left')}>left</button>
