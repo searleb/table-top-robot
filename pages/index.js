@@ -16,7 +16,9 @@ import styles from '../styles/Home.module.css';
  */
 
 export default function Home() {
-  const [botPos, setBotPos] = useState({ x: 0, y: 0, facing: 0 });
+  const [botPos, setBotPos] = useState({
+    x: 0, y: 0, facing: 0, rotation: 0,
+  });
   const [moveError, setMoveError] = useState(false);
 
   const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
@@ -80,16 +82,19 @@ export default function Home() {
         moveWest();
         break;
       default:
-        console.log('Unknown direction: ', DIRECTIONS[botPos.facing]);
+        console.error('Unknown direction index: ', botPos.facing);
         break;
     }
   };
 
   const handleRotate = (turn) => {
     let newHeading;
+    let newRotation;
 
     // turn left, decrements through the directions array
     if (turn === 'left') {
+      newRotation = botPos.rotation - 90;
+
       if (botPos.facing === 0) {
         newHeading = 3;
       } else {
@@ -99,6 +104,8 @@ export default function Home() {
 
     // turn right, increments though the directions array
     if (turn === 'right') {
+      newRotation = botPos.rotation + 90;
+
       if (botPos.facing === 3) {
         newHeading = 0;
       } else {
@@ -109,22 +116,45 @@ export default function Home() {
     setBotPos({
       ...botPos,
       facing: newHeading,
+      rotation: newRotation,
     });
   };
 
+  const getRobotStyle = () => {
+    console.log('botPos', botPos);
+    const x = botPos.x * 100;
+    // y is inverted to move 0,0 from top left to bottom left
+    // take the grid size index and subtract the bot y position to achieve this.
+    const y = (4 - botPos.y) * 100;
+    console.log('x', x);
+    return {
+      transform: `translate(${x}%,${y}%) rotate(${botPos.rotation}deg)`,
+    };
+  };
+
   return (
-    <div className={styles.container}>
+    <div>
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className={styles.main}>
+      <main>
         <h1 className={styles.title}>
           Table Top Robot
         </h1>
 
-        <section />
+        <section className={styles.section}>
+          <div className={styles.grid}>
+            {Array.from(Array(25)).map((_, i) => <div key={i} />)}
+            <span
+              className={styles.robo}
+              style={{ ...getRobotStyle() }}
+            >
+              🤖
+            </span>
+          </div>
+        </section>
         <pre>{`${botPos.x}, ${botPos.y}, ${DIRECTIONS[botPos.facing]}`}</pre>
         <pre>{`${moveError}`}</pre>
 
