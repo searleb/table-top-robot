@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useState } from 'react';
-import styles from '../styles/Home.module.css';
+import TableTop from '../components/TableTop';
 
 /**
  * Grid index allowed x or y: 0-4
@@ -16,7 +16,7 @@ import styles from '../styles/Home.module.css';
  */
 
 export default function Home() {
-  const [botPos, setBotPos] = useState({
+  const [robot, setBotPos] = useState({
     x: 0, y: 0, facing: 0, rotation: 0,
   });
   const [moveError, setMoveError] = useState(false);
@@ -24,51 +24,51 @@ export default function Home() {
   const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
 
   const moveNorth = () => {
-    if (botPos.y === 4) {
+    if (robot.y === 4) {
       setMoveError(true);
     } else {
       setBotPos({
-        ...botPos,
-        y: botPos.y + 1,
+        ...robot,
+        y: robot.y + 1,
       });
     }
   };
 
   const moveSouth = () => {
-    if (botPos.y === 0) {
+    if (robot.y === 0) {
       setMoveError(true);
     } else {
       setBotPos({
-        ...botPos,
-        y: botPos.y - 1,
+        ...robot,
+        y: robot.y - 1,
       });
     }
   };
 
   const moveEast = () => {
-    if (botPos.x === 4) {
+    if (robot.x === 4) {
       setMoveError(true);
     } else {
       setBotPos({
-        ...botPos,
-        x: botPos.x + 1,
+        ...robot,
+        x: robot.x + 1,
       });
     }
   };
 
   const moveWest = () => {
-    if (botPos.x === 0) {
+    if (robot.x === 0) {
       setMoveError(true);
     } else {
       setBotPos({
-        ...botPos,
-        x: botPos.x - 1,
+        ...robot,
+        x: robot.x - 1,
       });
     }
   };
 
   const handleMove = () => {
-    switch (botPos.facing) {
+    switch (robot.facing) {
       case 0:
         moveNorth();
         break;
@@ -82,7 +82,7 @@ export default function Home() {
         moveWest();
         break;
       default:
-        console.error('Unknown direction index: ', botPos.facing);
+        console.error('Unknown direction index: ', robot.facing);
         break;
     }
   };
@@ -93,43 +93,31 @@ export default function Home() {
 
     // turn left, decrements through the directions array
     if (turn === 'left') {
-      newRotation = botPos.rotation - 90;
+      newRotation = robot.rotation - 90;
 
-      if (botPos.facing === 0) {
+      if (robot.facing === 0) {
         newHeading = 3;
       } else {
-        newHeading = botPos.facing - 1;
+        newHeading = robot.facing - 1;
       }
     }
 
     // turn right, increments though the directions array
     if (turn === 'right') {
-      newRotation = botPos.rotation + 90;
+      newRotation = robot.rotation + 90;
 
-      if (botPos.facing === 3) {
+      if (robot.facing === 3) {
         newHeading = 0;
       } else {
-        newHeading = botPos.facing + 1;
+        newHeading = robot.facing + 1;
       }
     }
 
     setBotPos({
-      ...botPos,
+      ...robot,
       facing: newHeading,
       rotation: newRotation,
     });
-  };
-
-  const getRobotStyle = () => {
-    console.log('botPos', botPos);
-    const x = botPos.x * 100;
-    // y is inverted to move 0,0 from top left to bottom left
-    // take the grid size index and subtract the bot y position to achieve this.
-    const y = (4 - botPos.y) * 100;
-    console.log('x', x);
-    return {
-      transform: `translate(${x}%,${y}%) rotate(${botPos.rotation}deg)`,
-    };
   };
 
   return (
@@ -140,22 +128,11 @@ export default function Home() {
       </Head>
 
       <main>
-        <h1 className={styles.title}>
-          Table Top Robot
-        </h1>
+        <h1>Table Top Robot</h1>
 
-        <section className={styles.section}>
-          <div className={styles.grid}>
-            {Array.from(Array(25)).map((_, i) => <div key={i} />)}
-            <span
-              className={styles.robo}
-              style={{ ...getRobotStyle() }}
-            >
-              🤖
-            </span>
-          </div>
-        </section>
-        <pre>{`${botPos.x}, ${botPos.y}, ${DIRECTIONS[botPos.facing]}`}</pre>
+        <TableTop robot={robot} />
+
+        <pre>{`${robot.x}, ${robot.y}, ${DIRECTIONS[robot.facing]}`}</pre>
         <pre>{`${moveError}`}</pre>
 
         <button onClick={handleMove}>move</button>
