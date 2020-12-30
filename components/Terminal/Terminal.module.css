@@ -45,29 +45,3 @@
   /* this is a terrible property to use in most cases */
   outline: none; 
 }
-
-.input:focus + .caret{
-  display: none;
-}
-
-.form {
-  position: relative;
-}
-
-.caret { 
-  position: absolute;
-  height: 18px;
-  left: 0px;
-  border: 1px solid aquamarine;
-  width: 10px;
-  animation-name: blink;
-  animation-iteration-count: infinite;
-  animation-duration: 1s;
-  animation-timing-function: steps(1);
-}
-
-@keyframes blink {
-  50% {
-    border-color: transparent;
-  }
-}

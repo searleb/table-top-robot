@@ -23,8 +23,8 @@ export default function Terminal({
     terminalWindow.current.scrollTop = terminalWindow.current.scrollHeight;
   }, [terminalFeed]);
 
-  const addLineToTerminal = (line, withInput = true) => setTerminalFeed([
-    ...terminalFeed,
+  const addLineToTerminal = (line, withInput = true) => setTerminalFeed((feed) => [
+    ...feed,
     `${line ? `${line}` : ''} ${withInput ? `${inputValue}` : ''}`,
   ]);
 
@@ -72,6 +72,15 @@ export default function Terminal({
     addLineToTerminal(`${x},${y},${DIRECTIONS[facing]}`, false);
   };
 
+  const handleMoveWithError = () => {
+    const success = handleMove();
+    if (!success) {
+      addLineToTerminal('I\'ll fall off if I go any further this way!', false);
+    } else {
+      addLineToTerminal();
+    }
+  };
+
   const handleCommand = (e) => {
     e.preventDefault();
 
@@ -85,8 +94,8 @@ export default function Terminal({
     } else if (robot) {
       switch (inputValue) {
         case 'move()':
-          handleMove();
-          break;
+          handleMoveWithError();
+          return;
         case 'left()':
           handleRotate('left');
           break;
@@ -98,7 +107,6 @@ export default function Terminal({
           return;
         default:
           addLineToTerminal('command not found: ');
-          return;
       }
       // break from a case to add it to the terminal
       // return from a case to stop this running
@@ -126,7 +134,6 @@ export default function Terminal({
           placeholder="Enter command:"
           ref={terminalInput}
         />
-        {/* <span className={styles.caret} /> */}
       </form>
     </section>
   );
