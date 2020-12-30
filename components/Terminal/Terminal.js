@@ -11,7 +11,7 @@ const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
 const ROTATIONS = [0, 90, 180, 270];
 
 export default function Terminal({
-  setRobot, handleMove, handleRotate, robotIsPlaced,
+  setRobot, handleMove, handleRotate, robot,
 }) {
   const [inputValue, setInputValue] = useState('');
   const [terminalFeed, setTerminalFeed] = useState([]);
@@ -23,13 +23,16 @@ export default function Terminal({
     terminalWindow.current.scrollTop = terminalWindow.current.scrollHeight;
   }, [terminalFeed]);
 
-  const addLineToTerminal = (line) => setTerminalFeed([...terminalFeed, `${line ? `${line}: ` : ''} ${inputValue}`]);
+  const addLineToTerminal = (line, withInput = true) => setTerminalFeed([
+    ...terminalFeed,
+    `${line ? `${line}` : ''} ${withInput ? `${inputValue}` : ''}`,
+  ]);
 
   // simple error handling, if either coordinate is out of bounds
   // or if facing direction is somehow invalid
   const handlePlaceErrors = (x, y, facing) => {
     if (x > 4 || y > 4 || facing === -1) {
-      addLineToTerminal('invalid');
+      addLineToTerminal('invalid: ');
       throw new Error('invalid');
     }
   };
@@ -42,9 +45,8 @@ export default function Terminal({
     if (Array.isArray(match)) {
       params = match[1].split(',');
     }
-    console.log('params', params);
     if (params.length < 3) {
-      addLineToTerminal('error');
+      addLineToTerminal('error: ');
       return;
     }
     const x = Number(params[0]);
@@ -65,6 +67,11 @@ export default function Terminal({
     });
   };
 
+  const handleReport = () => {
+    const { x, y, facing } = robot;
+    addLineToTerminal(`${x},${y},${DIRECTIONS[facing]}`, false);
+  };
+
   const handleCommand = (e) => {
     e.preventDefault();
 
@@ -73,9 +80,9 @@ export default function Terminal({
 
     if (inputValue.startsWith('place')) {
       placeBot();
-    } else if (!robotIsPlaced) {
-      addLineToTerminal('call place() to add a robot');
-    } else if (robotIsPlaced) {
+    } else if (!robot) {
+      addLineToTerminal('call place() to add a robot', false);
+    } else if (robot) {
       switch (inputValue) {
         case 'move()':
           handleMove();
@@ -87,13 +94,14 @@ export default function Terminal({
           handleRotate('right');
           break;
         case 'report()':
-          break;
+          handleReport();
+          return;
         default:
-          addLineToTerminal('command not found');
+          addLineToTerminal('command not found: ');
           return;
       }
-      // this will only run if the default case isn't hit
-      // therefore only adding valid cases to the terminal feed
+      // break from a case to add it to the terminal
+      // return from a case to stop this running
       addLineToTerminal();
     }
   };
@@ -128,5 +136,14 @@ Terminal.propTypes = {
   setRobot: PropTypes.func.isRequired,
   handleMove: PropTypes.func.isRequired,
   handleRotate: PropTypes.func.isRequired,
-  robotIsPlaced: PropTypes.bool.isRequired,
+  robot: PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
+    facing: PropTypes.number.isRequired,
+    rotation: PropTypes.number.isRequired,
+  }),
+};
+
+Terminal.defaultProps = {
+  robot: null,
 };

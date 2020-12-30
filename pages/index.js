@@ -17,6 +17,13 @@ import Terminal from '../components/Terminal';
  */
 
 export default function Home() {
+  /**
+   * @var robot
+   * @type object
+   * @description null initial state.
+   * object shape:
+   * { x: num, y: num, facing: num, rotation: num }
+   */
   const [robot, setRobot] = useState(null);
   const [moveError, setMoveError] = useState(false);
 
@@ -137,6 +144,7 @@ export default function Home() {
           handleMove={handleMove}
           handleRotate={handleRotate}
           robotIsPlaced={robot !== null}
+          robot={robot}
         />
       </main>
     </div>
