@@ -34,5 +34,9 @@ TableTop.propTypes = {
     x: PropTypes.number.isRequired,
     y: PropTypes.number.isRequired,
     rotation: PropTypes.number.isRequired,
-  }).isRequired,
+  }),
+};
+
+TableTop.defaultProps = {
+  robot: null,
 };

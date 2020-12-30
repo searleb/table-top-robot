@@ -1,5 +1,73 @@
 .terminal {
   background: rgba(0,0,0,0.75);
   color: white;
+  font-family: monospace;
   padding: .5rem;
+  position: relative;
+}
+
+.terminal::before {
+  content: 'table-top-terminal';
+  opacity: 0.15;
+  text-align: right;
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 0;
+  right: .25rem;
+}
+
+.feed {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 .5rem;
+  height: 90px;
+  overflow-y: auto;
+  overflow-x: scroll;
+  overflow: hidden;
+  position: relative;
+}
+
+.input {
+  width: 100%;
+  caret-color: aquamarine;
+  background: transparent;
+  appearance: none;
+  border: 0;
+  color: aquamarine;
+  font-size: 1rem;
+  font-family: monospace;
+  padding: 0;
+  height: 18px;
+}
+
+.input:focus {
+  /* this is a terrible property to use in most cases */
+  outline: none; 
+}
+
+.input:focus + .caret{
+  display: none;
+}
+
+.form {
+  position: relative;
+}
+
+.caret { 
+  position: absolute;
+  height: 18px;
+  left: 0px;
+  border: 1px solid aquamarine;
+  width: 10px;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-duration: 1s;
+  animation-timing-function: steps(1);
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
 }

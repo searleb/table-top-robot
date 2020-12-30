@@ -123,7 +123,7 @@ export default function Home() {
   return (
     <div>
       <Head>
-        <title>Create Next App</title>
+        <title>Table Top Robot</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -131,15 +131,14 @@ export default function Home() {
         <h1>Table Top Robot</h1>
 
         <TableTop robot={robot} />
+
         <Terminal
           setRobot={setRobot}
+          handleMove={handleMove}
+          handleRotate={handleRotate}
+          robotIsPlaced={robot !== null}
         />
-
-        <button onClick={handleMove}>move</button>
-        <button onClick={() => handleRotate('left')}>left</button>
-        <button onClick={() => handleRotate('right')}>right</button>
       </main>
-
     </div>
   );
 }
