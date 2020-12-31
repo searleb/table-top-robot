@@ -69,13 +69,13 @@ export default function Terminal({
 
   const handleReport = () => {
     const { x, y, facing } = robot;
-    addLineToTerminal(`${x},${y},${DIRECTIONS[facing]}`, false);
+    addLineToTerminal(`report: ${x},${y},${DIRECTIONS[facing]}`, false);
   };
 
   const handleMoveWithError = () => {
     const success = handleMove();
     if (!success) {
-      addLineToTerminal('I\'ll fall off if I go any further this way!', false);
+      addLineToTerminal('I\'ll fall off if I go any farther!', false);
     } else {
       addLineToTerminal();
     }
@@ -95,22 +95,21 @@ export default function Terminal({
       switch (inputValue) {
         case 'move()':
           handleMoveWithError();
-          return;
+          break;
         case 'left()':
           handleRotate('left');
+          addLineToTerminal();
           break;
         case 'right()':
           handleRotate('right');
+          addLineToTerminal();
           break;
         case 'report()':
           handleReport();
-          return;
+          break;
         default:
           addLineToTerminal('command not found: ');
       }
-      // break from a case to add it to the terminal
-      // return from a case to stop this running
-      addLineToTerminal();
     }
   };
 

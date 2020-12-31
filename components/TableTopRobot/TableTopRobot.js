@@ -118,10 +118,10 @@ export default function TableTopRobot() {
       <TableTop robot={robot} />
 
       <Terminal
+        robot={robot}
         setRobot={setRobot}
         handleMove={handleMove}
         handleRotate={handleRotate}
-        robot={robot}
       />
     </>
   );
