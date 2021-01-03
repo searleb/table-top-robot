@@ -5,7 +5,7 @@
 
 import PropTypes from 'prop-types';
 import { useState, useEffect, useRef } from 'react';
-import styles from './Terminal.module.css';
+import css from './Terminal.module.css';
 
 const DIRECTIONS = ['NORTH', 'EAST', 'SOUTH', 'WEST'];
 const ROTATIONS = [0, 90, 180, 270];
@@ -23,6 +23,7 @@ export default function Terminal({
     terminalWindow.current.scrollTop = terminalWindow.current.scrollHeight;
   }, [terminalFeed]);
 
+  // helper func to update terminal feed
   const addLineToTerminal = (line, withInput = true) => setTerminalFeed((feed) => [
     ...feed,
     `${line ? `${line}` : ''} ${withInput ? `${inputValue}` : ''}`,
@@ -51,7 +52,7 @@ export default function Terminal({
     }
     const x = Number(params[0]);
     const y = Number(params[1]);
-    const facing = DIRECTIONS.indexOf(params[2].trim().toUpperCase());
+    const facing = DIRECTIONS.indexOf(params[2]?.trim().toUpperCase());
     const rotation = ROTATIONS[facing];
 
     try {
@@ -67,6 +68,7 @@ export default function Terminal({
     });
   };
 
+  // Prints report to terminal
   const handleReport = () => {
     const { x, y, facing } = robot;
     addLineToTerminal(`report: ${x},${y},${DIRECTIONS[facing]}`, false);
@@ -75,7 +77,7 @@ export default function Terminal({
   const handleMoveWithError = () => {
     const success = handleMove();
     if (!success) {
-      addLineToTerminal('I\'ll fall off if I go any farther!', false);
+      addLineToTerminal('I\'ll fall off if I go any further!', false);
     } else {
       addLineToTerminal();
     }
@@ -87,12 +89,15 @@ export default function Terminal({
     // empty input field
     setInputValue('');
 
-    if (inputValue.startsWith('place')) {
+    // trimming and lowercasing to support mixed lower/upper case input
+    const input = inputValue.trim().toLowerCase();
+
+    if (input.startsWith('place')) {
       placeBot();
     } else if (!robot) {
       addLineToTerminal('call place() to add a robot', false);
     } else if (robot) {
-      switch (inputValue) {
+      switch (input) {
         case 'move()':
           handleMoveWithError();
           break;
@@ -115,20 +120,20 @@ export default function Terminal({
 
   return (
     <section
-      className={styles.terminal}
+      className={css.terminal}
       onClick={() => terminalInput.current.focus()}
     >
-      <ul className={styles.feed} ref={terminalWindow}>
+      <ul className={css.feed} ref={terminalWindow}>
         {/* eslint-disable-next-line react/no-array-index-key */}
         {terminalFeed.map((item, i) => <li key={item + i}>{item}</li>)}
       </ul>
 
-      <form onSubmit={handleCommand} className={styles.form}>
+      <form onSubmit={handleCommand} className={css.form}>
         <input
           type="text"
           value={inputValue}
           onChange={({ target }) => setInputValue(target.value)}
-          className={styles.input}
+          className={css.input}
           maxLength={18}
           placeholder="Enter command:"
           ref={terminalInput}

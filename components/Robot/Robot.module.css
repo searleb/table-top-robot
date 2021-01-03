@@ -1,0 +1,36 @@
+.robot {
+  transition: transform 1s ease;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 30px;
+  background-image: url('/robot.png');
+  background-repeat: no-repeat;
+  background-position: 0px;
+  transform: rotate(-90deg) scale(1.5);
+}
+
+.robot.walk {
+  animation: walk;
+  animation-duration: 0.4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(8);
+}
+
+@keyframes walk {
+  100% {
+    background-position: -192px;
+  }
+}
+
+.moveable {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 1s ease;
+  position: absolute;
+}

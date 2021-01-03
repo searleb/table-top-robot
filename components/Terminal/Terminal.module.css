@@ -47,6 +47,10 @@
 }
 
 .input:focus {
-  /* this is a terrible property to use in most cases */
+  /* 
+    This is a terrible property to use in most cases,
+    without it being restyled 
+    I would have to hear a very good reason to let it go into a real production site!
+   */
   outline: none; 
 }

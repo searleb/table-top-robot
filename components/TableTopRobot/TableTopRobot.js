@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import Robot from '../Robot';
 import TableTop from '../TableTop';
 import Terminal from '../Terminal';
 
@@ -115,7 +116,9 @@ export default function TableTopRobot() {
 
   return (
     <>
-      <TableTop robot={robot} />
+      <TableTop>
+        <Robot robot={robot} />
+      </TableTop>
 
       <Terminal
         robot={robot}
