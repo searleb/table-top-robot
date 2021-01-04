@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Robot from '../Robot';
-import TableTop from '../TableTop';
-import Terminal from '../Terminal';
+import Robot from './Robot';
+import TableTop from './TableTop';
+import Terminal from './Terminal';
 
 /**
  * Grid index allowed x or y: 0-4

@@ -123,12 +123,12 @@ export default function Terminal({
       className={css.terminal}
       onClick={() => terminalInput.current.focus()}
     >
-      <ul className={css.feed} ref={terminalWindow}>
+      <ul className={css.feed} ref={terminalWindow} data-testid="feed">
         {/* eslint-disable-next-line react/no-array-index-key */}
         {terminalFeed.map((item, i) => <li key={item + i}>{item}</li>)}
       </ul>
 
-      <form onSubmit={handleCommand} className={css.form}>
+      <form onSubmit={handleCommand} className={css.form} data-testid="form">
         <input
           type="text"
           value={inputValue}
@@ -137,6 +137,7 @@ export default function Terminal({
           maxLength={18}
           placeholder="Enter command:"
           ref={terminalInput}
+          data-testid="input"
         />
       </form>
     </section>

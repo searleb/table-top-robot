@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
-import usePrevious from '../../hooks/usePrevious';
+import usePrevious from '../../../hooks/usePrevious';
 import css from './Robot.module.css';
 
 export default function Robot({ robot }) {
@@ -30,6 +30,7 @@ export default function Robot({ robot }) {
         className={css.moveable}
         style={{ ...getRobotStyle() }}
         onTransitionEnd={() => setAnimate(false)}
+        data-testid="robot"
       >
         <span
           role="img"
